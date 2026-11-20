@@ -11,6 +11,19 @@ const [toys, setToys] = useState([]);
 function addToy(newToy) {
   setToys((currentToys) => [...currentToys, newToy]);
 }
+
+function deleteToy(id) {
+  fetch(`http://localhost:3001/toys/${id}`, {
+    method: "DELETE",
+  })
+    .then(() => {
+      setToys((currentToys) =>
+        currentToys.filter((toy) => toy.id !== id)
+      );
+    })
+    .catch((error) => console.error("Error deleting toy:", error));
+}
+
 useEffect(() => {
   fetch("http://localhost:3001/toys")
     .then((response) => response.json())
@@ -28,7 +41,7 @@ useEffect(() => {
       <div className="buttonContainer">
         <button onClick={handleClick}>Add a Toy</button>
       </div>
-      <ToyContainer toys={toys} />
+     <ToyContainer toys={toys} onDeleteToy={deleteToy} />
     </>
   );
 }
